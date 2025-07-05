@@ -1,20 +1,24 @@
-import { useState } from 'react'
-import BookList from './components/BookComponent'
-import './App.css'
+// src/App.jsx
+// В настоящее время этот файл не будет рендерить никаких компонентов напрямую,
+// так как маршрутизация теперь управляется main.jsx через RouterProvider.
+// Однако, его можно использовать для глобальных провайдеров контекста, общих стилей и т.д.
+
+import './App.css'; // Оставляем импорт глобальных стилей
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Library Management System</h1>
-      </header>
-      <main>
-        <BookList/>
-      </main>
-    </div>
-  )
+    // В будущем здесь могут быть общие обертки, контексты и т.п.
+    // Например:
+    // <AuthContextProvider>
+    //   <OtherContextProvider>
+    //     <Outlet /> // Если App.jsx будет родительским маршрутом для всех остальных
+    //   </OtherContextProvider>
+    // </AuthContextProvider>
+    // Но пока оставляем пустым, так как Layout уже выполняет эту роль
+    <>
+      {/* Пока ничего не рендерим здесь напрямую, т.к. Layout используется для маршрутизации */}
+    </>
+  );
 }
 
-export default App
+export default App;

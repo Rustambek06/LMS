@@ -1,0 +1,27 @@
+import axios from "axios";
+
+const API_BASE_URL = 'http://localhost:8080';
+
+const api = axios.create({
+    baseURL: API_BASE_URL, 
+    headers: {
+        'Content-Type': 'application/json',
+        // Здесь можно добавить другие глобвльные звголовки, например, для авторизации 
+    },
+});
+
+export const getBooks = async () => {
+    try {
+        const response = await api.get('/books');
+        return response.data;
+    } catch (error){
+        // Здесь можно добавить более сложную обработку ошибок, логирование и т.д.
+        console.error('Error fetching books:', error);
+        throw error; // Перебрасываем ошибку, чтобы компонент мог ее обработать
+    }
+}
+
+// Здесь можно добавлять другие функции для работы с API:
+// export const createBook = async (bookData) => { ... }
+// export const updateBook = async (id, bookData) => { ... }
+// export const deleteBook = async (id) => { ... }
