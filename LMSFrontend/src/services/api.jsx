@@ -21,6 +21,16 @@ export const getBooks = async () => {
     }
 }
 
+export const createBook = async (bookData) => {
+    try {
+        const response = await api.post('/books', bookData);
+        return response.data;
+    } catch (error) {
+        console.error('Error creating book:', error);
+        throw error;
+    }
+} ;
+
 // Здесь можно добавлять другие функции для работы с API:
 // export const createBook = async (bookData) => { ... }
 // export const updateBook = async (id, bookData) => { ... }
