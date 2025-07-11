@@ -31,6 +31,16 @@ export const createBook = async (bookData) => {
     }
 } ;
 
+export const deleteBook = async (bookId) => {
+    try {
+        const response = await api.delete(`/books/${bookId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting book:', error);
+        throw error;
+    }
+}
+
 // Здесь можно добавлять другие функции для работы с API:
 // export const createBook = async (bookData) => { ... }
 // export const updateBook = async (id, bookData) => { ... }

@@ -1,6 +1,6 @@
 // src/pages/BookListPage/BookListPage.jsx
 import React, { useEffect, useState } from "react";
-import { getBooks, createBook } from "../../services/api"; // Путь к сервису API
+import { getBooks, createBook, deleteBook } from "../../services/api"; // Путь к сервису API
 
 function BookListPage() { // Переименовали компонент в BookListPage
     const [books, setBooks] = useState([]);
@@ -11,6 +11,9 @@ function BookListPage() { // Переименовали компонент в Bo
     const [newBookAuthor, setNewBookAuthor] = useState('');
     const [newBookYear, setNewBookYear] = useState(null);
     const [addingBook, setAddingBook] = useState(false);
+
+    const [hoveredBookId, setHoveredBookId] = useState(null);
+    const [deletingBook, setDeletingBook] = useState(false);
 
     const fetchBooksData = async () => {
         try {
@@ -54,9 +57,33 @@ function BookListPage() { // Переименовали компонент в Bo
         }
     };
 
+    const handleMouseEnter = async (bookId) => {
+        setHoveredBookId(bookId);
+    };
+
+    const handleMouseLeave = () => {
+        setHoveredBookId(null);
+    };
+
+    const handleDeleteClick = async (bookId) => {
+        setDeletingBook(true);
+        console.log(deletingBook);
+        try {
+            const response = await deleteBook(bookId);
+        } catch (err) {
+            console.error('Failed to delete book:', err);
+            setError(err);
+        }
+        finally {
+            setDeletingBook(false);
+        }
+        console.log(`Delete button clicked for book ID: ${bookId}`);
+    };
+
     useEffect(() => {
         fetchBooksData();
-    }, [addingBook]);
+        console.log(deletingBook);
+    }, [addingBook, deletingBook]);
 
     if (error && !loading && !addingBook) { // Отображаем ошибку, если она есть и не идет загрузка/добавление
         return <div>Error : {error.message}</div>;
@@ -123,7 +150,35 @@ function BookListPage() { // Переименовали компонент в Bo
                 ) : (
                     <ul>
                         {books.map(book => (
-                            <li key={book.id}>{book.id}: {book.title} by {book.author || 'Unknown Author'}, {book.year}</li> 
+                            <li
+                            key={book.id}
+                            onMouseEnter={() => handleMouseEnter(book.id)}
+                            onMouseLeave={handleMouseLeave}
+                            style={{ position: 'relative', paddingRight: '60px' }} // Added padding for the button
+                            >
+                            {book.title} by {book.author || 'Unknown Author'}, {book.year}
+
+                            {/* Render the button only if this book is currently hovered */}
+                            {hoveredBookId === book.id && (
+                                <button
+                                onClick={() => handleDeleteClick(book.id)}
+                                style={{
+                                    position: 'absolute',
+                                    right: '10px',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    background: '#007bff',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    padding: '5px 10px',
+                                    cursor: 'pointer'
+                                }}
+                                >
+                                Delete
+                                </button>
+                            )}
+                            </li>
                         ))}
                     </ul>
                 )
