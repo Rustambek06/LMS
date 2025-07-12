@@ -2,6 +2,7 @@ package com.library.LibraryManagementSystem.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod; // Импортируем HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -21,10 +22,12 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable()) // Отключаем CSRF для простоты (для API без сессий)
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/books").permitAll() // Разрешаем доступ к /books без аутентификации (пока для всех методов)
-                //.requestMatchers(HttpMethod.GET, "/books").permitAll() // Если хочешь разрешить только GET /books
-                //.requestMatchers(HttpMethod.POST, "/books").hasRole("ADMIN") // Пример: POST /books только для ADMIN
-                .anyRequest().authenticated() // Все остальные запросы требуют аутентификации
+                .requestMatchers(HttpMethod.GET, "/books").permitAll()
+                .requestMatchers(HttpMethod.POST, "/books").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/books/**").hasRole("ADMIN")
+                .requestMatchers("/readers/**").hasRole("ADMIN")
+                .requestMatchers("/loans/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
             )
             .httpBasic(withDefaults()); // Используем базовую HTTP-аутентификацию
 
