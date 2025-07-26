@@ -1,26 +1,27 @@
-package com.library.LibraryManagementSystem.model;
+package com.library.LibraryManagementSystem.model; // Обнови пакет
 
 import jakarta.persistence.*;
 import java.util.Set;
 import java.util.HashSet;
 
 @Entity
-@Table(name = "users") // Name of table in DB
+@Table(name = "users") // Название таблицы в базе данных
 public class User {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false) // Имя пользователя должно быть уникальным и не null
     private String username;
 
     @Column(nullable = false)
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    // Используем String для простоты, в реальном проекте лучше использовать отдельную сущность Role
+    @ElementCollection(fetch = FetchType.EAGER) // Загружаем роли вместе с пользователем
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "table")
+    @Column(name = "role")
     private Set<String> roles = new HashSet<>();
 
     public User() {}
@@ -31,7 +32,7 @@ public class User {
         this.roles = roles;
     }
 
-        // Getters and Setters
+    // Getters and Setters
     public Long getId() {
         return id;
     }
